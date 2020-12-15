@@ -11,29 +11,24 @@
     <artifactId>project</artifactId>
 
     <name>project</name>
-    <description>Project management for workflow</description>
+    <description>Project management for Ruliu xxxxxxxx</description>
 
     <properties>
-        <lombok.version>1.18.12</lombok.version>
         <httpclient.version>4.5.9</httpclient.version>
         <commons-io.version>2.5</commons-io.version>
         <net.sf.cglib.version>2.1.3</net.sf.cglib.version>
         <commons-collections.version>3.2.2</commons-collections.version>
+        <aspectj.version>1.9.5</aspectj.version>
+        <ehcache.version>3.8.1</ehcache.version>
+        <kryo.version>4.0.1</kryo.version>
+        <latency-utils.version>2.0.3</latency-utils.version>
+        <httpasyncclient.version>4.1.4</httpasyncclient.version>
+        <redisson.version>3.14.0</redisson.version>
     </properties>
 
     <packaging>jar</packaging>
 
     <dependencies>
-        <dependency>
-            <groupId>com.xxxxx.xxxxxxxx</groupId>
-            <artifactId>templateengine</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
-        </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
@@ -58,6 +53,34 @@
             <artifactId>commons-collections</artifactId>
             <version>${commons-collections.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${aspectj.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>${ehcache.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.cache</groupId>
+            <artifactId>cache-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.esotericsoftware</groupId>
+            <artifactId>kryo-shaded</artifactId>
+            <version>${kryo.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.latencyutils</groupId>
+            <artifactId>LatencyUtils</artifactId>
+            <version>${latency-utils.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpasyncclient</artifactId>
+            <version>${httpasyncclient.version}</version>
+        </dependency>
     </dependencies>
-
 </project>

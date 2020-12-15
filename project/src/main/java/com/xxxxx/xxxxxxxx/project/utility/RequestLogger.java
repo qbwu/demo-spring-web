@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 qbwu All Rights Reserved
+ * Copyright (c) 2020 qbwu, Inc All Rights Reserved
  *
  * Author: qb.wu@outlook.com
  * Date: 2020/6/10 21:54
@@ -119,13 +119,13 @@ public class RequestLogger {
         try {
             accum = jsonMapper.writeValueAsString(accumulators);
         } catch (Exception e) {
-            accum = String.format("Failed to serialize accumulators, error: %s", e.getMessage());
+            accum = String.format("Failed to serialize accumulators, reason: %s", e.getMessage());
         }
 
         try {
             profilers = jsonMapper.writeValueAsString(callProfilers);
         } catch (Exception e) {
-            profilers = String.format("Failed to serialize callProfilers, error: %s", e.getMessage());
+            profilers = String.format("Failed to serialize callProfilers, reason: %s", e.getMessage());
         }
 
         return String.format(
@@ -175,7 +175,7 @@ public class RequestLogger {
                             jsonMapper.writeValueAsString(headers));
             }
         } catch (Exception e) {
-            return String.format("Failed to serialize request or response, error: %s",
+            return String.format("Failed to serialize request or response, reason: %s",
                     e.getMessage());
         }
     }

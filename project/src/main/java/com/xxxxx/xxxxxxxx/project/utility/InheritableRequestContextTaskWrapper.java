@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 qbwu All Rights Reserved
+ * Copyright (c) 2020 qbwu, Inc All Rights Reserved
  *
  * Author: qb.wu@outlook.com
  * Date: 2020/7/1 1:21
@@ -15,44 +15,65 @@ import org.springframework.web.context.request.RequestContextHolder;
 
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class InheritableRequestContextTaskWrapper {
     private final static Logger logger = LoggerFactory.getLogger(InheritableRequestContextTaskWrapper.class);
 
     private final Map parentMDC = MDC.getCopyOfContextMap();
     private final RequestAttributes parentAttrs = RequestContextHolder.currentRequestAttributes();
+    private Map<String, String> orinMDC = null;
+    private RequestAttributes orinAttrs = null;
+
+    public <R> Supplier<R> lambda0(Supplier<R> runnable) {
+        return () -> {
+            switchContext();
+            try {
+                return runnable.get();
+            } finally {
+                rewindContext();
+            }
+        };
+    }
 
     public <T, R> Function<T, R> lambda1(Function<T, R> runnable) {
         return t -> {
-            Map orinMDC = MDC.getCopyOfContextMap();
-            if (parentMDC == null) {
-                MDC.clear();
-            } else {
-                MDC.setContextMap(parentMDC);
-            }
-
-            RequestAttributes orinAttrs = null;
-            try {
-                orinAttrs = RequestContextHolder.currentRequestAttributes();
-            } catch (IllegalStateException e) {
-                logger.debug("Worker thread without current request attributes, error message: ",
-                             e.getMessage());
-            }
-            RequestContextHolder.setRequestAttributes(parentAttrs, true);
+            switchContext();
             try {
                 return runnable.apply(t);
             } finally {
-                if (orinMDC == null) {
-                    MDC.clear();
-                } else {
-                    MDC.setContextMap(orinMDC);
-                }
-                if (orinAttrs == null) {
-                    RequestContextHolder.resetRequestAttributes();
-                } else {
-                    RequestContextHolder.setRequestAttributes(orinAttrs, true);
-                }
+                rewindContext();
             }
         };
+    }
+
+    private void switchContext() {
+        orinMDC = MDC.getCopyOfContextMap();
+        if (parentMDC == null) {
+            MDC.clear();
+        } else {
+            MDC.setContextMap(parentMDC);
+        }
+
+        try {
+            orinAttrs = RequestContextHolder.currentRequestAttributes();
+        } catch (IllegalStateException e) {
+            logger.debug("Worker thread without current request attributes, error message: {}",
+                    e.getMessage());
+        }
+        RequestContextHolder.setRequestAttributes(parentAttrs, true);
+    }
+
+    private void rewindContext() {
+        if (orinMDC == null) {
+            MDC.clear();
+        } else {
+            MDC.setContextMap(orinMDC);
+        }
+        if (orinAttrs == null) {
+            RequestContextHolder.resetRequestAttributes();
+        } else {
+            RequestContextHolder.setRequestAttributes(orinAttrs, true);
+        }
     }
 }

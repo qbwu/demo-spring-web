@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 qbwu All Rights Reserved
+ * Copyright (c) 2020 qbwu, Inc All Rights Reserved
  *
  * Author: qb.wu@outlook.com
  * Date: 2020/5/8 16:40
@@ -16,7 +16,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.retry.annotation.EnableRetry;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -25,14 +27,19 @@ import java.util.stream.Collectors;
  * PM means Project Management
  */
 
-@MapperScan("com.xxxxx.xxxxxxxx.project.mappers")
+@MapperScan("com.xxxxx.xxxxxxxx.project.mapper")
 @ServletComponentScan
 @SpringBootApplication(scanBasePackages = {
         "com.xxxxx.xxxxxxxx.templateengine",
-        "com.xxxxx.xxxxxxxx.templateengine.models"
+        "com.xxxxx.xxxxxxxx.templateengine.models",
+        "com.xxxxx.xxxxxxxx.project",
+        "com.xxxxx.xxxxxxxx.file",
+        "com.xxxxx.xxxxxxxx.serviceadapter.scagent"
 })
+@ImportResource(locations = {"classpath:sc.xml"})
 @EnableRetry
 @EnableCaching
+@EnableScheduling
 public class PMApplication implements ApplicationRunner {
     private static final Logger logger = LoggerFactory.getLogger(PMApplication.class);
 
